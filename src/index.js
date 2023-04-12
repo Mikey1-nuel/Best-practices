@@ -1,10 +1,39 @@
-import add, { remove } from './modules/addremovelist.js';
-import deleteItems from './modules/delete-all-list.js';
 import './style.css';
 
-const listContainer = document.querySelector('.list');
-const input = document.getElementById('input');
 const collection = JSON.parse(localStorage.getItem('taskList')) || [];
+const input = document.getElementById('input');
+
+const add = () => {
+  const tasks = {
+    description: input.value,
+    completed: false,
+    index: collection.length + 1,
+  };
+
+  if (tasks.description !== '') {
+    collection.push(tasks);
+  }
+  localStorage.setItem('taskList', JSON.stringify(collection));
+};
+
+const remove = (index) => {
+  collection.splice(index, 1);
+  localStorage.setItem('taskList', JSON.stringify(collection));
+};
+export { remove };
+
+
+
+const deleteItems = () => {
+  let collection = JSON.parse(localStorage.getItem('taskList')) || [];
+  const deleteAll = collection.filter((item) => item.completed === false);
+  collection = deleteAll;
+  localStorage.setItem('taskList', JSON.stringify(collection));
+  window.location.reload();
+};
+export default deleteItems;
+
+const listContainer = document.querySelector('.list');
 
 const renderList = () => {
   let li = '';
